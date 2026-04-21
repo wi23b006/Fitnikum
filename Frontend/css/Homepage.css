@@ -1,0 +1,160 @@
+/* Allgemeine Stil für den Body */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    overflow-x: hidden; /* verhindert horizontales Scrollen */
+}
+
+/* EA Hotel Logo oben */
+h1.EA-Hotel {
+    font-size: 2.2rem;      
+    color: #01415b;
+    margin-left: 0; /* bootstrap zentriert oder links */
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* Navigation */
+nav.Leiste {
+    background-color: rgb(1, 65, 91); 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Links in der Navigation */
+nav.Leiste .nav-link {
+    color: white;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+nav.Leiste .nav-link:hover {
+    background-color: rgb(1, 49, 68);
+    padding: 5px 15px;
+    border-radius: 5px;
+    transform: scale(1.1);
+}
+
+/* Intro-Abschnitt */
+.intro {
+    padding: 80px 0;
+}
+
+/* Bild */
+.intro img {
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+/* Textbox */
+.intro-textbox {
+    background: white;
+    padding: 50px 60px;
+    border: 1px solid rgba(1, 65, 91, 0.15); 
+    max-width: 750px;
+}
+
+/* Titel */
+.intro-textbox h2 {
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: rgb(1, 65, 91);
+    margin-bottom: 5px;
+    font-family: serif;
+}
+
+/* Kleine Linie unter "Willkommen" */
+.divider {
+    width: 60px;
+    height: 2px;
+    background: rgb(1, 65, 91);
+    margin: 10px 0 25px 0;
+}
+
+/* Text */
+.intro-textbox p {
+    color: rgb(1, 65, 91);
+    line-height: 1.7;
+    font-size: 1.15rem;
+    margin-bottom: 15px;
+    font-family: serif;
+}
+
+/* Slideshow */
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 800px;     
+    overflow: hidden;
+    animation: fadeInZoom 0.9s ease-out forwards;
+}
+
+/* Bilder */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: slideshow 30s infinite; 
+}
+
+.s1 { background-image: url('../img/Homepage_img1.jpg'); animation-delay: 0s; }
+.s2 { background-image: url('../img/Homepage_img2.jpg'); animation-delay: 10s; }
+.s3 { background-image: url('../img/Homepage_img3.jpg'); animation-delay: 20s; }
+
+@keyframes slideshow {
+    0%   { opacity: 0; }
+    5%   { opacity: 1; }
+    30%  { opacity: 1; }
+    35%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes fadeInZoom {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.slideshow-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    background-color: rgb(1, 65, 91);
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    h1.EA-Hotel { font-size: 1.8rem; }
+    .intro { padding: 30px 20px; }
+    .intro-textbox { padding: 30px 20px; max-width: 100%; }
+    .intro-textbox h2 { font-size: 1.8rem; }
+    .intro-textbox p { font-size: 1rem; line-height: 1.6; }
+    .slideshow-text { font-size: 1.5rem; }
+}
+
+/* Willkommen-Text rechts oben im Header */
+.welcome-bar {
+    color: #01415b; /* passend zum EA HOTEL Schriftzug */
+    font-weight: 500;
+    font-size: 1.2rem;
+    white-space: nowrap; /* verhindert Zeilenumbruch */
+}
