@@ -529,8 +529,7 @@ body.auth-page {
     color: var(--accent);
     font-weight: 700;
     font-size: 1rem;
-}
-.product-grid {
+}.product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
@@ -542,6 +541,10 @@ body.auth-page {
     background: var(--dark);
     padding: 32px;
     transition: background 0.2s;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .product-card:hover {
@@ -554,6 +557,7 @@ body.auth-page {
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 8px;
+    min-height: 34px;
 }
 
 .product-card p {
@@ -561,6 +565,29 @@ body.auth-page {
     color: var(--text-muted);
     line-height: 1.5;
     margin-bottom: 12px;
+}
+
+/* Beschreibung gleich hoch machen */
+.product-card p:first-of-type {
+    min-height: 65px;
+}
+
+/* Preis gleich positionieren */
+.product-card p:nth-of-type(2) {
+    min-height: 24px;
+}
+
+/* Details-Button nach unten schieben */
+.product-card .btn-outline {
+    margin-top: auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Warenkorb-Button gleich breit machen */
+.product-card .btn-primary {
+    width: 100%;
+    text-align: center;
 }
 
 .product-image {
@@ -575,4 +602,63 @@ body.auth-page {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+}
+
+/* Falls du später echte Produktbilder verwendest */
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+/* Produktdetails */
+.detail-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    align-items: center;
+}
+
+.detail-card h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3rem;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.detail-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.detail-image {
+    height: 300px;
+}
+
+.detail-price {
+    color: var(--accent) !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Diashow für Produktdetails */
+.slideshow {
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.detail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
