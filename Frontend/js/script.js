@@ -7,7 +7,7 @@ var produkte = [
         details: "Whey Protein unterstützt dich nach dem Training beim Muskelaufbau. Es ist einfach zuzubereiten und ideal für Shakes.",
         preis: "24,99 €",
         vorrat: "20 Stück",
-        bild: "Bild"
+        bild: "../res/img/whey-protein.jpg"
     },
     {
         id: 2,
@@ -17,7 +17,7 @@ var produkte = [
         details: "Der Proteinriegel ist praktisch für unterwegs und liefert schnell Energie nach dem Training.",
         preis: "2,49 €",
         vorrat: "50 Stück",
-        bild: "Bild"
+        bild: "../res/img/proteinriegel.jpg"
     },
     {
         id: 3,
@@ -27,7 +27,7 @@ var produkte = [
         details: "Veganes Protein eignet sich für alle, die auf tierische Produkte verzichten möchten.",
         preis: "27,99 €",
         vorrat: "15 Stück",
-        bild: "Bild"
+        bild: "../res/img/veganes-protein.jpg"
     },
     {
         id: 4,
@@ -37,7 +37,7 @@ var produkte = [
         details: "Vitamin D unterstützt Knochen, Muskeln und das Immunsystem besonders in der dunklen Jahreszeit.",
         preis: "9,99 €",
         vorrat: "35 Stück",
-        bild: "Bild"
+        bild: "../res/img/vitamin-d.jpg"
     },
     {
         id: 5,
@@ -47,7 +47,7 @@ var produkte = [
         details: "Vitamin C unterstützt das Immunsystem und ist ein beliebtes Alltagsprodukt.",
         preis: "7,99 €",
         vorrat: "40 Stück",
-        bild: "Bild"
+        bild: "../res/img/vitamin-c.jpg"
     },
     {
         id: 6,
@@ -57,7 +57,7 @@ var produkte = [
         details: "Multivitamin kombiniert mehrere wichtige Vitamine in einem Produkt.",
         preis: "14,99 €",
         vorrat: "25 Stück",
-        bild: "Bild"
+        bild: "../res/img/multivitamin.jpg"
     },
     {
         id: 7,
@@ -67,7 +67,7 @@ var produkte = [
         details: "Der Shaker ist ideal für Proteinshakes im Gym, in der Arbeit oder unterwegs.",
         preis: "6,99 €",
         vorrat: "60 Stück",
-        bild: "Bild"
+        bild: "../res/img/shaker.jpg"
     },
     {
         id: 8,
@@ -77,7 +77,7 @@ var produkte = [
         details: "Trainingshandschuhe helfen dir bei schweren Übungen und verbessern den Griff.",
         preis: "12,99 €",
         vorrat: "18 Stück",
-        bild: "Bild"
+        bild: "../res/img/trainingshandschuhe.jpg"
     },
     {
         id: 9,
@@ -87,16 +87,18 @@ var produkte = [
         details: "Die Sporttasche bietet genug Platz für Kleidung, Shaker, Handtuch und Zubehör.",
         preis: "29,99 €",
         vorrat: "12 Stück",
-        bild: "Bild"
+        bild: "../res/img/sporttasche.jpg"
     }
 ];
 
-function produkteAnzeigen(kategorie) {
+function produkteAnzeigen(kategorie, suchbegriff) {
     var produktListe = document.getElementById("product-list");
 
     if (produktListe == null) {
         return;
     }
+
+    suchbegriff = suchbegriff.toLowerCase();
 
     produktListe.innerHTML = "";
 
@@ -104,18 +106,35 @@ function produkteAnzeigen(kategorie) {
 
         if (produkte[i].kategorie == kategorie) {
 
-            produktListe.innerHTML +=
-                '<div class="product-card">' +
-                    '<div class="product-image">' + produkte[i].bild + '</div>' +
-                    '<h3>' + produkte[i].name + '</h3>' +
-                    '<p>' + produkte[i].beschreibung + '</p>' +
-                    '<p><strong>Preis:</strong> ' + produkte[i].preis + '</p>' +
-                    '<p><strong>Vorrat:</strong> ' + produkte[i].vorrat + '</p>' +
-                    '<button class="btn btn-outline" onclick="produktdetailsOeffnen(' + produkte[i].id + ')">Details</button> ' +
-                    '<button class="btn btn-primary" onclick="inWarenkorbLegen(' + produkte[i].id + ')">In den Warenkorb</button>' +
-                '</div>';
+            var name = produkte[i].name.toLowerCase();
+
+            if (suchbegriff == "" || name.indexOf(suchbegriff) != -1) {
+
+                produktListe.innerHTML +=
+                    '<div class="product-card">' +
+                        '<div class="product-image"><img src="' + produkte[i].bild + '" alt="' + produkte[i].name + '"></div>' +
+                        '<h3>' + produkte[i].name + '</h3>' +
+                        '<p>' + produkte[i].beschreibung + '</p>' +
+                        '<p><strong>Preis:</strong> ' + produkte[i].preis + '</p>' +
+                        '<p><strong>Vorrat:</strong> ' + produkte[i].vorrat + '</p>' +
+                        '<button class="btn btn-outline" onclick="produktdetailsOeffnen(' + produkte[i].id + ')">Details</button> ' +
+                        '<button class="btn btn-primary" onclick="inWarenkorbLegen(' + produkte[i].id + ')">In den Warenkorb</button>' +
+                    '</div>';
+            }
         }
     }
+}
+
+function produkteSuchen() {
+    var suchfeld = document.getElementById("suchfeld");
+    var produktListe = document.getElementById("product-list");
+
+    if (suchfeld == null || produktListe == null) {
+        return;
+    }
+
+    var kategorie = produktListe.getAttribute("data-category");
+    produkteAnzeigen(kategorie, suchfeld.value);
 }
 
 function produktdetailsOeffnen(produktId) {
@@ -145,7 +164,7 @@ function produktdetailsAnzeigen() {
 
     detailBox.innerHTML =
         '<div class="detail-card">' +
-            '<div class="product-image detail-image">' + produkt.bild + '</div>' +
+            '<div class="product-image detail-image"><img src="' + produkt.bild + '" alt="' + produkt.name + '"></div>' +
             '<div>' +
                 '<p class="section-label">' + produkt.kategorie + '</p>' +
                 '<h1>' + produkt.name + '</h1>' +
@@ -186,7 +205,7 @@ window.onload = function () {
 
     if (produktListe != null) {
         var kategorie = produktListe.getAttribute("data-category");
-        produkteAnzeigen(kategorie);
+        produkteAnzeigen(kategorie, "");
     }
 
     produktdetailsAnzeigen();
