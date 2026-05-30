@@ -189,15 +189,20 @@ function getProduktIdAusUrl() {
 }
 
 function inWarenkorbLegen(produktId) {
-    var produktName = "";
+    var produkt = null;
 
     for (var i = 0; i < produkte.length; i++) {
         if (produkte[i].id == produktId) {
-            produktName = produkte[i].name;
+            produkt = produkte[i];
         }
     }
 
-    alert(produktName + " wurde in den Warenkorb gelegt.");
+    if (produkt != null) {
+        var preis = produkt.preis.replace(" €", "");
+        preis = preis.replace(",", ".");
+
+        window.location.href = "../../Backend/logic/cart.php?action=add&id=" + produkt.id + "&name=" + produkt.name + "&price=" + preis;
+    }
 }
 
 window.onload = function () {
