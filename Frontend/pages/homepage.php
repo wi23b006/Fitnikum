@@ -1,0 +1,68 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitnikum – Fitness für alle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../res/css/style.css">
+</head>
+<body>
+
+<?php include("../includes/navbar.php"); ?>
+
+    <section class="hero">
+        <span class="hero-tag">Dein Fitness-Shop</span>
+        <h1>Stärker.<br><span>Schneller.</span><br>Fitnikum.</h1>
+        <p>Alles, was du für dein Training brauchst — Ausrüstung, Supplements und Ernährung — an einem Ort. Kein Aufwand. Kein Kompromiss.</p>
+        <div class="hero-actions">
+            <a href="proteine.php" class="btn btn-primary">Jetzt shoppen</a>
+            <a href="register.php" class="btn btn-outline">Konto erstellen</a>
+        </div>
+    </section>
+
+    <section class="categories">
+        <p class="section-label">Unsere Kategorien</p>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-icon">🏋️</div>
+                <h3>Training</h3>
+                <p>Geräte, Gewichte und Zubehör für dein Gym oder Home-Workout.</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🥤</div>
+                <h3>Supplements</h3>
+                <p>Protein, Kreatin und mehr — nur was wirklich funktioniert.</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🥗</div>
+                <h3>Ernährung</h3>
+                <p>Meal Prep, gesunde Snacks und Tipps für die richtige Ernährung.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="why">
+        <div>
+            <p class="section-label">Warum Fitnikum?</p>
+            <h2>Sport ist<br>keine Option.<br>Es ist <span style="color: var(--accent);">Lifestyle.</span></h2>
+            <p>Wir glauben, dass Fitness für jeden zugänglich sein soll — egal ob Anfänger oder Profi. Deshalb bieten wir hochwertige Produkte zu fairen Preisen, mit ehrlicher Beratung ohne Marketing-Blabla.</p>
+            <a href="register.php" class="btn btn-primary">Jetzt registrieren</a>
+        </div>
+        <div class="stats">
+            <div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Produkte im Sortiment</div></div>
+            <div class="stat-item"><div class="stat-number">10k+</div><div class="stat-label">Zufriedene Kunden</div></div>
+            <div class="stat-item"><div class="stat-number">24h</div><div class="stat-label">Lieferzeit</div></div>
+            <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Qualitätsgarantie</div></div>
+        </div>
+    </section>
+
+    <footer>
+        <span class="navbar-logo" style="font-size:1.1rem;">Fitnikum</span>
+        <span>© 2026 Fitnikum. Alle Rechte vorbehalten.</span>
+    </footer>
+
+</body>
+</html>
