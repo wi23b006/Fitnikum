@@ -1,67 +1,98 @@
 <?php
+include("helpers.php");
 
-session_start();
-
+// Warenkorb in der Session anlegen, falls noch keiner da ist
 if (!isset($_SESSION["cart"])) {
     $_SESSION["cart"] = array();
 }
 
-if (isset($_GET["action"])) {
+$action = $_GET["action"] ?? "";
 
-    if ($_GET["action"] == "add") {
+if ($action == "add") {
 
-        $id = $_GET["id"];
-        $name = $_GET["name"];
-        $price = $_GET["price"];
+    // Produkt-ID kommt per POST vom Frontend
+    include("../config/dbaccess.php");
+    $connection = getDatabaseConnection();
 
-        if (isset($_SESSION["cart"][$id])) {
-            $_SESSION["cart"][$id]["quantity"] = $_SESSION["cart"][$id]["quantity"] + 1;
-        } else {
-            $_SESSION["cart"][$id]["id"] = $id;
-            $_SESSION["cart"][$id]["name"] = $name;
-            $_SESSION["cart"][$id]["price"] = $price;
-            $_SESSION["cart"][$id]["quantity"] = 1;
-        }
+    $productId = (int)($_POST["id"] ?? 0);
 
-        header("Location: ../../Frontend/pages/warenkorb.php");
-        exit;
+    // Produkt aus der DB holen (DB-Statements nur im BE - Matrix 4P)
+    $stmt = $connection->prepare("SELECT id, name, price FROM products WHERE id = ?");
+    $stmt->bind_param("i", $productId);
+    $stmt->execute();
+    $product = $stmt->get_result()->fetch_assoc();
+
+    if (!$product) {
+        sendJson(["success" => false, "error" => "Produkt nicht gefunden."]);
     }
 
-    if ($_GET["action"] == "remove") {
-
-        $id = $_GET["id"];
-
-        unset($_SESSION["cart"][$id]);
-
-        header("Location: ../../Frontend/pages/warenkorb.php");
-        exit;
+    if (isset($_SESSION["cart"][$productId])) {
+        // Schon im Warenkorb → Menge erhöhen
+        $_SESSION["cart"][$productId]["quantity"]++;
+    } else {
+        // Neu in den Warenkorb
+        $_SESSION["cart"][$productId] = [
+            "id"       => $product["id"],
+            "name"     => $product["name"],
+            "price"    => $product["price"],
+            "quantity" => 1
+        ];
     }
 
-    if ($_GET["action"] == "plus") {
-
-        $id = $_GET["id"];
-
-        $_SESSION["cart"][$id]["quantity"] = $_SESSION["cart"][$id]["quantity"] + 1;
-
-        header("Location: ../../Frontend/pages/warenkorb.php");
-        exit;
-    }
-
-    if ($_GET["action"] == "minus") {
-
-        $id = $_GET["id"];
-
-        $_SESSION["cart"][$id]["quantity"] = $_SESSION["cart"][$id]["quantity"] - 1;
-
-        if ($_SESSION["cart"][$id]["quantity"] <= 0) {
-            unset($_SESSION["cart"][$id]);
-        }
-
-        header("Location: ../../Frontend/pages/warenkorb.php");
-        exit;
-    }
+    sendJson(["success" => true, "count" => cartCount()]);
 }
 
-echo "cart.php";
+else if ($action == "remove") {
+    $productId = (int)($_POST["id"] ?? 0);
+    unset($_SESSION["cart"][$productId]);
+    sendJson(["success" => true, "count" => cartCount()]);
+}
 
+else if ($action == "plus") {
+    $productId = (int)($_POST["id"] ?? 0);
+    if (isset($_SESSION["cart"][$productId])) {
+        $_SESSION["cart"][$productId]["quantity"]++;
+    }
+    sendJson(["success" => true, "count" => cartCount()]);
+}
+
+else if ($action == "minus") {
+    $productId = (int)($_POST["id"] ?? 0);
+    if (isset($_SESSION["cart"][$productId])) {
+        $_SESSION["cart"][$productId]["quantity"]--;
+        if ($_SESSION["cart"][$productId]["quantity"] <= 0) {
+            unset($_SESSION["cart"][$productId]);
+        }
+    }
+    sendJson(["success" => true, "count" => cartCount()]);
+}
+
+else if ($action == "count") {
+    // Anzahl Produkte für das Badge in der Navbar
+    sendJson(["success" => true, "count" => cartCount()]);
+}
+
+else if ($action == "list") {
+    // Kompletter Warenkorb-Inhalt + Gesamtpreis
+    $items = array_values($_SESSION["cart"]);
+    $total = 0;
+    foreach ($items as $item) {
+        $total += $item["price"] * $item["quantity"];
+    }
+    sendJson(["success" => true, "items" => $items, "total" => $total]);
+}
+
+else {
+    sendJson(["success" => false, "error" => "Unbekannte Aktion."]);
+}
+
+
+// Kleine Hilfsfunktion: zählt alle Stückzahlen im Warenkorb
+function cartCount() {
+    $total = 0;
+    foreach ($_SESSION["cart"] as $item) {
+        $total += $item["quantity"];
+    }
+    return $total;
+}
 ?>

@@ -1,62 +1,76 @@
 <?php
-
-session_start();
-
+include("helpers.php");
 include("../config/dbaccess.php");
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: ../../Frontend/pages/login.php");
-    exit;
-}
-
-if (!isset($_SESSION["cart"])) {
-    $_SESSION["cart"] = array();
-}
-
-if (count($_SESSION["cart"]) == 0) {
-    header("Location: ../../Frontend/pages/warenkorb.php");
-    exit;
-}
-
+requireLogin();
 $connection = getDatabaseConnection();
 
-$user_id = $_SESSION["user_id"];
-$gesamt = 0;
-
-foreach ($_SESSION["cart"] as $product) {
-    $zwischensumme = $product["price"] * $product["quantity"];
-    $gesamt = $gesamt + $zwischensumme;
+if (!isset($_SESSION["cart"]) || count($_SESSION["cart"]) == 0) {
+    sendJson(["success" => false, "error" => "Warenkorb ist leer."]);
 }
 
-$sql = "INSERT INTO orders (user_id, total_price, created_at)
-        VALUES ('$user_id', '$gesamt', NOW())";
+$userId        = $_SESSION["user_id"];
+$paymentMethod = trim($_POST["payment_method"] ?? "");
+$voucherCode   = trim($_POST["voucher_code"]   ?? "");
 
-if ($connection->query($sql) === TRUE) {
+if ($paymentMethod == "" && $voucherCode == "") {
+    sendJson(["success" => false, "error" => "Bitte Zahlungsmethode oder Gutschein wählen."]);
+}
 
-    $order_id = $connection->insert_id;
+// Gesamtbetrag berechnen
+$total = 0;
+foreach ($_SESSION["cart"] as $item) {
+    $total += $item["price"] * $item["quantity"];
+}
 
-    foreach ($_SESSION["cart"] as $product) {
+// Gutschein einlösen (Spec V.c: Restwert bleibt erhalten)
+$voucherUsedAmount = 0;
+if ($voucherCode != "") {
 
-        $product_id = $product["id"];
-        $product_name = $product["name"];
-        $price = $product["price"];
-        $quantity = $product["quantity"];
+    $stmt = $connection->prepare("SELECT id, remaining_value, expires_at FROM vouchers WHERE code = ?");
+    $stmt->bind_param("s", $voucherCode);
+    $stmt->execute();
+    $voucher = $stmt->get_result()->fetch_assoc();
 
-        $sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
-                    VALUES ('$order_id', '$product_id', '$product_name', '$price', '$quantity')";
-
-        $connection->query($sqlItem);
+    if (!$voucher) {
+        sendJson(["success" => false, "error" => "Gutschein-Code nicht gefunden."]);
+    }
+    if ($voucher["expires_at"] < date("Y-m-d")) {
+        sendJson(["success" => false, "error" => "Gutschein ist abgelaufen."]);
     }
 
-    $_SESSION["cart"] = array();
+    $remaining = (float)$voucher["remaining_value"];
 
-    header("Location: ../../Frontend/pages/bestellbestaetigung.php");
-    exit;
+    if ($remaining >= $total) {
+        // Gutschein deckt alles → Restwert bleibt
+        $voucherUsedAmount = $total;
+        $newRemaining = $remaining - $total;
+    } else {
+        // Nur ein Teil wird abgedeckt → Gutschein leer
+        $voucherUsedAmount = $remaining;
+        $newRemaining = 0;
+    }
 
-} else {
-    echo "Fehler bei der Bestellung: " . $connection->error;
+    $stmt = $connection->prepare("UPDATE vouchers SET remaining_value = ? WHERE id = ?");
+    $stmt->bind_param("di", $newRemaining, $voucher["id"]);
+    $stmt->execute();
 }
 
-$connection->close();
+// Bestellung anlegen (prepared statement → kein SQL-Injection-Risiko mehr)
+$stmt = $connection->prepare("INSERT INTO orders (user_id, total_price, payment_method, voucher_code, voucher_used_amount) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("idssd", $userId, $total, $paymentMethod, $voucherCode, $voucherUsedAmount);
+$stmt->execute();
+$orderId = $stmt->insert_id;
 
+// Bestellpositionen anlegen
+foreach ($_SESSION["cart"] as $item) {
+    $stmt = $connection->prepare("INSERT INTO order_items (order_id, product_id, product_name, price, quantity) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("iisdi", $orderId, $item["id"], $item["name"], $item["price"], $item["quantity"]);
+    $stmt->execute();
+}
+
+// Warenkorb leeren
+$_SESSION["cart"] = array();
+
+sendJson(["success" => true, "order_id" => $orderId]);
 ?>

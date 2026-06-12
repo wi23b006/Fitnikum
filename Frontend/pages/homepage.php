@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php include("../includes/session.php"); ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../res/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
@@ -64,5 +65,6 @@
         <span>© 2026 Fitnikum. Alle Rechte vorbehalten.</span>
     </footer>
 
+    <script src="../js/shop.js"></script>
 </body>
 </html>

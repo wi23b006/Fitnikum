@@ -1,94 +1,62 @@
-<?php
-
-session_start();
-
-if (!isset($_SESSION["cart"])) {
-    $_SESSION["cart"] = array();
-}
-
-?>
-
+<?php include("../includes/session.php"); ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitnikum - Warenkorb</title>
+    <title>Fitnikum – Warenkorb</title>
     <link rel="stylesheet" href="../res/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
-    <?php include("../includes/navbar.php"); ?>
+<?php include("../includes/navbar.php"); ?>
 
-    <div class="auth-wrapper">
-        <div class="auth-form-panel">
+<section class="categories">
+    <div class="auth-form-panel" style="max-width:700px; margin:0 auto;">
 
-            <h1>Warenkorb</h1>
+        <h1>Warenkorb</h1>
 
-            <?php
+        <!-- Liste der Produkte im Warenkorb -->
+        <div id="cart-container">Lade Warenkorb...</div>
 
-            if (count($_SESSION["cart"]) == 0) {
+        <!-- Gesamtpreis + Bestellbereich -->
+        <div id="checkout-area" style="display:none; margin-top:30px;">
 
-                echo "<p>Dein Warenkorb ist leer.</p>";
+            <h2>Gesamt: <span id="cart-total"></span></h2>
 
-            } else {
+            <?php if (!isset($_SESSION["user_id"])) { ?>
+                <p style="margin-top:20px;">
+                    Zum Bestellen bitte <a href="login.php">einloggen</a>.
+                </p>
+            <?php } else { ?>
 
-                $gesamt = 0;
+                <div class="form-group" style="margin-top:20px;">
+                    <label>Zahlungsmethode</label>
+                    <select id="payment-method">
+                        <option value="">Bitte wählen</option>
+                        <option value="Rechnung">Rechnung</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="Kreditkarte">Kreditkarte</option>
+                    </select>
+                </div>
 
-                foreach ($_SESSION["cart"] as $product) {
+                <div class="form-group">
+                    <label>Gutschein-Code (optional)</label>
+                    <input type="text" id="voucher-code" placeholder="z. B. TEST1">
+                </div>
 
-                    $zwischensumme = $product["price"] * $product["quantity"];
-                    $gesamt = $gesamt + $zwischensumme;
+                <p id="order-error" style="color:red;"></p>
 
-                    echo "<div class='cart-item'>";
+                <button class="btn btn-primary" onclick="bestellen()">Bestellung aufgeben</button>
 
-                    echo "<h3>" . $product["name"] . "</h3>";
-                    echo "<p>Einzelpreis: " . $product["price"] . " €</p>";
-                    echo "<p>Menge: " . $product["quantity"] . "</p>";
-                    echo "<p>Zwischensumme: " . $zwischensumme . " €</p>";
-
-                    echo "<div style='margin-top: 15px; margin-bottom: 15px;'>";
-
-                    echo "<a href='../../Backend/logic/cart.php?action=minus&id=" . $product["id"] . "' style='padding: 8px 14px; background-color: #dddddd; color: black; text-decoration: none; border-radius: 6px; margin-right: 8px;'>";
-                    echo "-";
-                    echo "</a>";
-
-                    echo "<span style='font-weight: bold; margin-right: 8px;'>";
-                    echo $product["quantity"];
-                    echo "</span>";
-
-                    echo "<a href='../../Backend/logic/cart.php?action=plus&id=" . $product["id"] . "' style='padding: 8px 14px; background-color: #dddddd; color: black; text-decoration: none; border-radius: 6px;'>";
-                    echo "+";
-                    echo "</a>";
-
-                    echo "</div>";
-
-                    echo "<a href='../../Backend/logic/cart.php?action=remove&id=" . $product["id"] . "' style='display: inline-block; padding: 8px 14px; background-color: #c0392b; color: white; text-decoration: none; border-radius: 6px;'>";
-                    echo "Produkt entfernen";
-                    echo "</a>";
-
-                    echo "</div>";
-                }
-
-                echo "<hr>";
-                echo "<h2>Gesamt: " . $gesamt . " €</h2>";
-
-                echo "<br>";
-
-                echo "<a href='../../Backend/logic/order.php' style='display: inline-block; padding: 12px 20px; background-color: #c6ff2e; color: black; text-decoration: none; border-radius: 8px; font-weight: bold;'>";
-                echo "Bestellung aufgeben";
-                echo "</a>";
-            }
-
-            ?>
-
+            <?php } ?>
         </div>
-    </div>
 
-    <footer>
-        <span>© 2026 Fitnikum</span>
-        <span>Datenschutz · Impressum</span>
-    </footer>
+    </div>
+</section>
+
+<script src="../js/shop.js"></script>
 
 </body>
 </html>

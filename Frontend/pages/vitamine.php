@@ -1,43 +1,27 @@
-<?php session_start(); ?>
+<?php include("../includes/session.php"); ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitnikum – Vitamine</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../res/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
 <?php include("../includes/navbar.php"); ?>
 
-    <section class="hero">
-        <span class="hero-tag">Produkte</span>
-        <h1>Vitamine</h1>
-        <p>
-            Hier findest du verschiedene Vitaminprodukte. Die Produkte sind aktuell nur Platzhalter
-            und werden später im Projekt vollständig ergänzt.
-        </p>
-    </section>
+<section class="categories">
+    <p class="section-label">Vitamine</p>
+    <h1>Unsere Vitamin-Produkte</h1>
 
-    <section class="categories">
-        <p class="section-label">Vitamin Produkte</p>
+    <input type="text" id="suchfeld" placeholder="Suchen ..." class="form-group" style="padding:10px; width:300px; margin-bottom:20px;">
 
-        <div class="search-bar">
-            <input type="text" id="suchfeld" placeholder="Produkt suchen..." onkeyup="produkteSuchen()">
-        </div>
+    <div id="product-list" class="category-grid" data-category="2"></div>
+</section>
 
-        <div id="product-list" class="product-grid" data-category="vitamine"></div>
-
-    </section>
-
-    <footer>
-        <span class="navbar-logo" style="font-size:1.1rem;">Fitnikum</span>
-        <span>© 2026 Fitnikum. Alle Rechte vorbehalten.</span>
-    </footer>
-    <script src="../js/script.js"></script>
+<script src="../js/shop.js"></script>
 
 </body>
 </html>
