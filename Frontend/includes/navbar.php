@@ -1,5 +1,4 @@
 <?php
-// Sicherheitshalber Session starten, falls die Seite session.php noch nicht inkludiert hat.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -32,7 +31,12 @@ $username = $_SESSION["username"] ?? null;
                 <?php if ($role === "user") { ?>
                     <li><a href="profil.php">Mein Konto</a></li>
                 <?php } ?>
-                <li><a href="warenkorb.php">Warenkorb</a></li>
+                <!-- Warenkorb-Link ist Drop-Ziel und zeigt Anzahl-Badge -->
+                <li>
+                    <a href="warenkorb.php" id="cart-link">
+                        🛒 Warenkorb (<span id="cart-badge">0</span>)
+                    </a>
+                </li>
             <?php } ?>
 
         </ul>
