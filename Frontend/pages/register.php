@@ -1,87 +1,76 @@
-<?php session_start(); ?>
+<?php include("../includes/session.php"); ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitnikum – Registrieren</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../res/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
 <?php include("../includes/navbar.php"); ?>
 
-    <div class="auth-wrapper">
-        <div class="auth-brand">
-            <div><span class="nav-logo">Fitnikum</span></div>
-            <div>
-                <h2>Kostenlos<br><span>starten.</span></h2>
-                <p>Erstell jetzt dein kostenloses Konto und profitier von allen Vorteilen.</p>
-                <ul class="perks">
-                    <li>Bestellhistorie &amp; Tracking</li>
-                    <li>Persönliche Wunschliste</li>
-                    <li>Exklusive Mitgliederangebote</li>
-                    <li>Schnellerer Checkout</li>
-                </ul>
+<section class="categories">
+    <div class="auth-form-panel" style="max-width:500px; margin:0 auto;">
+        <h1>Registrieren</h1>
+
+        <p id="error" style="color:red;"></p>
+
+        <form id="register-form" class="auth-form">
+            <div class="form-group">
+                <label>Anrede</label>
+                <select name="salutation" required>
+                    <option value="">Bitte wählen</option>
+                    <option value="Herr">Herr</option>
+                    <option value="Frau">Frau</option>
+                    <option value="Divers">Divers</option>
+                </select>
             </div>
-            <div class="auth-brand-footer">
-                Bereits registriert? <a href="login.php" style="color: var(--accent);">Jetzt einloggen →</a>
+            <div class="form-row">
+                <div class="form-group"><label>Vorname</label><input type="text" name="firstname" required></div>
+                <div class="form-group"><label>Nachname</label><input type="text" name="lastname" required></div>
             </div>
-        </div>
-
-        <div class="auth-form-panel">
-            <h1>Konto erstellen</h1>
-            <p class="auth-subtitle">Dauert nur eine Minute.</p>
-
-            <form class="auth-form" action="../../Backend/logic/register.php" method="post">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstname">Vorname</label>
-                        <input type="text" id="firstname" name="firstname" placeholder="Max" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastname">Nachname</label>
-                        <input type="text" id="lastname" name="lastname" placeholder="Mustermann" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">E-Mail</label>
-                    <input type="email" id="email" name="email" placeholder="deine@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Passwort</label>
-                    <input type="password" id="password" name="password" placeholder="Mindestens 8 Zeichen" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password2">Passwort bestätigen</label>
-                    <input type="password" id="password2" name="password2" placeholder="••••••••" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Konto erstellen</button>
-
-                <div class="terms-note">
-                    Mit der Registrierung stimmst du unseren <a href="#">AGB</a> und der <a href="#">Datenschutzerklärung</a> zu.
-                </div>
-
-                <div class="auth-divider">oder</div>
-
-                <div class="auth-link">
-                    Bereits registriert? <a href="login.php">Jetzt einloggen</a>
-                </div>
-            </form>
-        </div>
+            <div class="form-group"><label>Adresse</label><input type="text" name="address" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>PLZ</label><input type="text" name="postal_code" required></div>
+                <div class="form-group"><label>Ort</label><input type="text" name="city" required></div>
+            </div>
+            <div class="form-group"><label>E-Mail</label><input type="email" name="email" required></div>
+            <div class="form-group"><label>Benutzername</label><input type="text" name="username" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Passwort</label><input type="password" name="password" minlength="8" required></div>
+                <div class="form-group"><label>Passwort wiederholen</label><input type="password" name="password2" minlength="8" required></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Konto anlegen</button>
+        </form>
     </div>
+</section>
 
-    <footer>
-        <span>© 2026 Fitnikum</span>
-        <span>Datenschutz · Impressum</span>
-    </footer>
+<script>
+// Registrierung per AJAX absenden
+$("#register-form").on("submit", function(event) {
+    event.preventDefault();
+
+    // Clientseitige Validierung: Passwörter müssen übereinstimmen
+    var pw  = $("input[name=password]").val();
+    var pw2 = $("input[name=password2]").val();
+    if (pw !== pw2) {
+        $("#error").text("Passwörter stimmen nicht überein.");
+        return;
+    }
+
+    $.post("../../Backend/logic/register.php", $(this).serialize(), function(response) {
+        if (response.success) {
+            alert("Registrierung erfolgreich. Du kannst dich jetzt einloggen.");
+            window.location.href = "login.php";
+        } else {
+            $("#error").text(response.error);
+        }
+    }, "json");
+});
+</script>
 
 </body>
 </html>
