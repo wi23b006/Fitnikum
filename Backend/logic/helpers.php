@@ -1,6 +1,5 @@
 <?php
-// Drei kleine Hilfsfunktionen, damit wir uns in den Endpoint-Dateien
-// nicht ständig wiederholen müssen.
+// Hilfsfunktionen, die wir oft brauchen, damit wir uns nicht wiederholen 
 
 // Session starten (nur einmal, falls noch nicht läuft).
 if (session_status() === PHP_SESSION_NONE) {

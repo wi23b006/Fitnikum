@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump – Fitnikum Sprint 4 (schlanke Version)
+-- phpMyAdmin SQL Dump – Fitnikum Sprint 4
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -29,11 +29,10 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 
 -- ---------------------------------------------------------
 -- User
--- Felder laut Spec 1)b: Anrede, Vorname, Nachname, Adresse,
 -- PLZ, Ort, E-Mail, Username, Passwort.
--- role = 'user' oder 'admin' (Spec 1)e und 2)d).
--- active = aktiv/inaktiv (Matrix VIII Kunden verwalten).
--- remember_token = "Login merken" Cookie (Matrix III).
+-- role = 'user' oder 'admin' 
+-- active = aktiv/inaktiv
+-- remember_token = "Login merken" Cookie 
 -- ---------------------------------------------------------
 CREATE TABLE `users` (
   `id`             INT(11)      NOT NULL AUTO_INCREMENT,
@@ -52,19 +51,20 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Passwort-Hash für "test1234" (Beispiel) – bitte mit gen_hash.php
--- selbst erzeugen und unten ersetzen, sonst funktioniert der Login nicht.
+-- Beide Test-User haben das Passwort "test1234" 
 INSERT INTO `users`
   (`id`, `salutation`, `firstname`, `lastname`, `username`, `email`,
    `password_hash`, `address`, `postal_code`, `city`, `role`) VALUES
 (1, 'Herr', 'Admin', 'Fitnikum', 'admin', 'admin@fitnikum.at',
-    'HIER_HASH_EINFUEGEN', NULL, NULL, NULL, 'admin'),
+    '$2y$10$F08vOIcc15Pbh3nM2fWOF.8UmxL81L8290z0Vq99zaeWGw.5RPXK.',
+    NULL, NULL, NULL, 'admin'),
 (2, 'Herr', 'Max', 'Mustermann', 'maxm', 'max@test.at',
-    'HIER_HASH_EINFUEGEN', 'Teststraße 1', '1010', 'Wien', 'user');
+    '$2y$10$F08vOIcc15Pbh3nM2fWOF.8UmxL81L8290z0Vq99zaeWGw.5RPXK.',
+    'Teststraße 1', '1010', 'Wien', 'user');
 
 
 -- ---------------------------------------------------------
--- Zahlungsmethoden (Spec 6a, Matrix VI: hinzufügen)
+-- Zahlungsmethoden 
 -- ---------------------------------------------------------
 CREATE TABLE `payment_methods` (
   `id`      INT(11)      NOT NULL AUTO_INCREMENT,
@@ -77,7 +77,7 @@ CREATE TABLE `payment_methods` (
 
 
 -- ---------------------------------------------------------
--- Produkte (Spec Admin 1a: Name, Beschreibung, Bewertung, Preis, Foto)
+-- Produkte 
 -- ---------------------------------------------------------
 CREATE TABLE `products` (
   `id`          INT(11)        NOT NULL AUTO_INCREMENT,
@@ -105,10 +105,10 @@ INSERT INTO `products` (`name`, `description`, `category_id`, `price`, `rating`,
 
 -- ---------------------------------------------------------
 -- Bestellungen
--- created_at: Spec 6c "nach Datum sortiert"
--- payment_method: Matrix V "Auswahl Zahlungsmöglichkeit"
--- voucher_code + voucher_used_amount: Matrix V "Restwert bleibt erhalten"
--- invoice_number: Spec 6c "Rechnungsnummer wird generiert"
+-- created_at
+-- payment_method
+-- voucher_code + voucher_used_amount
+-- invoice_number
 -- ---------------------------------------------------------
 CREATE TABLE `orders` (
   `id`                  INT(11)       NOT NULL AUTO_INCREMENT,
@@ -126,8 +126,8 @@ CREATE TABLE `orders` (
 
 -- ---------------------------------------------------------
 -- Bestellpositionen
--- visible: Matrix VIII "Admin entfernt Produkt aus Bestellung,
--- für Kunde nicht mehr sichtbar"
+-- visible
+-- für Kunde nicht mehr sichtbar
 -- ---------------------------------------------------------
 CREATE TABLE `order_items` (
   `id`           INT(11)       NOT NULL AUTO_INCREMENT,
@@ -144,8 +144,7 @@ CREATE TABLE `order_items` (
 
 -- ---------------------------------------------------------
 -- Gutscheine
--- Spec Admin 3a: 5-stelliger alphanum. Code, Wert, Ablaufdatum
--- Matrix V: Restwert → remaining_value
+-- Restwert, remaining_value
 -- ---------------------------------------------------------
 CREATE TABLE `vouchers` (
   `id`              INT(11)        NOT NULL AUTO_INCREMENT,

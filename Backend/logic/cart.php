@@ -16,7 +16,7 @@ if ($action == "add") {
 
     $productId = (int)($_POST["id"] ?? 0);
 
-    // Produkt aus der DB holen (DB-Statements nur im BE - Matrix 4P)
+    // Produkt aus der DB holen 
     $stmt = $connection->prepare("SELECT id, name, price FROM products WHERE id = ?");
     $stmt->bind_param("i", $productId);
     $stmt->execute();

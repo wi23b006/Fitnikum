@@ -17,7 +17,7 @@ if ($firstname == "" || $lastname == "" || $currentPw == "") {
     sendJson(["success" => false, "error" => "Bitte Pflichtfelder und aktuelles Passwort ausfüllen."]);
 }
 
-// Passwort prüfen (Spec 6b: "beim Ändern von Daten, das Passwort verlangt")
+// Passwort prüfen 
 $stmt = $connection->prepare("SELECT password_hash FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);
 $stmt->execute();

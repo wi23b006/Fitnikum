@@ -1,5 +1,5 @@
 <?php
-include("../includes/session.php");
+include("../../Backend/logic/session.php");
 
 // Schutz: nur Admin darf rein
 if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
@@ -12,6 +12,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
 <head>
     <meta charset="UTF-8">
     <title>Fitnikum – Produkte verwalten</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../res/css/style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -53,15 +54,9 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
                 </select>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Preis (€) *</label>
-                    <input type="number" name="price" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Bewertung (0–5)</label>
-                    <input type="number" name="rating" step="0.1" min="0" max="5" value="0">
-                </div>
+            <div class="form-group">
+                <label>Preis (€) *</label>
+                <input type="number" name="price" step="0.01" min="0" required>
             </div>
 
             <div class="form-group">
@@ -78,7 +73,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
     <table id="products-table">
         <thead>
             <tr>
-                <th>ID</th><th>Name</th><th>Kategorie</th><th>Preis</th><th>Bewertung</th><th>Bild</th><th>Aktion</th>
+                <th>ID</th><th>Name</th><th>Kategorie</th><th>Preis</th><th>Bild</th><th>Aktion</th>
             </tr>
         </thead>
         <tbody></tbody>
