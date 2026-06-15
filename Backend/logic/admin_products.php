@@ -21,7 +21,7 @@ if ($action == "list") {
 
 
 else if ($action == "create") {
-    // Neues Produkt anlegen (Spec Admin 1a)
+    // Neues Produkt anlegen 
     $name        = trim($_POST["name"]        ?? "");
     $description = trim($_POST["description"] ?? "");
     $categoryId  = (int)($_POST["category_id"] ?? 0);
@@ -32,7 +32,7 @@ else if ($action == "create") {
         sendJson(["success" => false, "error" => "Bitte Name, Kategorie und Preis ausfüllen."]);
     }
 
-    // Bild hochladen falls vorhanden (Matrix VII 2P)
+    // Bild hochladen falls vorhanden 
     $imageFile = "";
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
         $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
@@ -49,7 +49,7 @@ else if ($action == "create") {
 
 
 else if ($action == "update") {
-    // Produkt bearbeiten (Matrix VII 2P)
+    // Produkt bearbeiten 
     $id          = (int)($_POST["id"] ?? 0);
     $name        = trim($_POST["name"]        ?? "");
     $description = trim($_POST["description"] ?? "");
@@ -77,7 +77,7 @@ else if ($action == "update") {
 
 
 else if ($action == "delete") {
-    // Produkt löschen (Matrix VII 2P)
+    // Produkt löschen 
     $id = (int)($_POST["id"] ?? 0);
 
     $stmt = $connection->prepare("DELETE FROM products WHERE id = ?");

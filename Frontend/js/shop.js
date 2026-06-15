@@ -1,19 +1,15 @@
-// Diese Datei steuert die Produktseiten, den Warenkorb und die Bestellung.
-// Sie wird von proteine.php, vitamine.php, zubehoer.php und warenkorb.php geladen.
 
-// Beim Laden der Seite: Cart-Badge in der Navbar aktualisieren
-// und ggf. die Produkte für die aktuelle Kategorie laden.
 $(document).ready(function() {
 
     updateCartBadge();
 
-    // Wenn eine Produktliste auf der Seite ist (proteine/vitamine/zubehoer)
+    // Wenn eine Produktliste auf der Seite ist 
     var produktListe = $("#product-list");
     if (produktListe.length > 0) {
         var kategorie = produktListe.data("category");
         produkteLaden(kategorie, "");
 
-        // Suchfeld: bei jedem Tastendruck neue Suche (Continuous Search)
+        // Suchfeld: bei jedem Tastendruck neue Suche
         $("#suchfeld").on("input", function() {
             produkteLaden(kategorie, $(this).val());
         });
@@ -24,7 +20,7 @@ $(document).ready(function() {
         warenkorbLaden();
     }
 
-    // Drag-and-Drop-Ziel: Warenkorb-Symbol in der Navbar
+    // Drag-and-Drop-Ziel Warenkorb-Symbol in der Navbar
     var dropZiel = $("#cart-link");
     if (dropZiel.length > 0) {
         dropZiel.on("dragover", function(e) {
@@ -44,7 +40,7 @@ $(document).ready(function() {
 });
 
 
-// Produkte einer Kategorie laden – mit optionalem Suchbegriff
+// Produkte einer Kategorie laden
 function produkteLaden(kategorie, suchbegriff) {
 
     var url = "../../Backend/logic/search_products.php?category=" + kategorie + "&q=" + encodeURIComponent(suchbegriff);
@@ -61,16 +57,12 @@ function produkteLaden(kategorie, suchbegriff) {
         for (var i = 0; i < response.products.length; i++) {
             var p = response.products[i];
 
-            // Bewertung als Sterne darstellen (z.B. 4.6 → "★★★★★ 4.6")
-            var sterne = sterneAnzeigen(p.rating);
-
             var karte =
                 '<div class="product-card" draggable="true" data-id="' + p.id + '">' +
                     '<div class="product-image"><img src="../res/img/' + p.image + '" alt="' + p.name + '"></div>' +
                     '<h3>' + p.name + '</h3>' +
                     '<p>' + p.description + '</p>' +
                     '<p><strong>Preis:</strong> ' + p.price + ' €</p>' +
-                    '<p><strong>Bewertung:</strong> ' + sterne + '</p>' +
                     '<button class="btn btn-primary" onclick="inWarenkorbLegen(' + p.id + ')">In den Warenkorb</button>' +
                 '</div>';
 
@@ -83,17 +75,6 @@ function produkteLaden(kategorie, suchbegriff) {
         });
 
     }, "json");
-}
-
-
-// Bewertung 4.6 → "★★★★★ (4.6)"
-function sterneAnzeigen(rating) {
-    var voll = Math.round(rating);
-    var s = "";
-    for (var i = 0; i < 5; i++) {
-        s += (i < voll) ? "★" : "☆";
-    }
-    return s + " (" + rating + ")";
 }
 
 
@@ -199,7 +180,7 @@ function bestellen() {
             window.location.href = "bestellbestaetigung.php";
         } else {
             if (response.error == "Bitte einloggen.") {
-                // User ist nicht eingeloggt → zum Login schicken
+                // User ist nicht eingeloggt, zum Login schicken
                 window.location.href = "login.php";
             } else {
                 $("#order-error").text(response.error);

@@ -4,7 +4,7 @@ include("../config/dbaccess.php");
 
 $connection = getDatabaseConnection();
 
-// Werte aus dem Formular holen (Spec 1b: alle Pflichtfelder)
+// Werte aus dem Formular holen
 $salutation = trim($_POST["salutation"] ?? "");
 $firstname  = trim($_POST["firstname"]  ?? "");
 $lastname   = trim($_POST["lastname"]   ?? "");
@@ -28,7 +28,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     sendJson(["success" => false, "error" => "Ungültige E-Mail-Adresse."]);
 }
 
-// Validierung: Passwort 2x identisch (Spec 1c)
+// Validierung: Passwort 2x identisch 
 if ($password !== $password2) {
     sendJson(["success" => false, "error" => "Die Passwörter stimmen nicht überein."]);
 }
@@ -46,7 +46,7 @@ if ($stmt->get_result()->num_rows > 0) {
     sendJson(["success" => false, "error" => "E-Mail oder Username schon vergeben."]);
 }
 
-// Passwort verschlüsseln (Spec 1d, Matrix 2P)
+// Passwort verschlüsseln
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
 // User anlegen

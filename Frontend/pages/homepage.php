@@ -1,4 +1,4 @@
-<?php include("../includes/session.php"); ?>
+<?php include("../../Backend/logic/session.php"); ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -7,6 +7,7 @@
     <title>Fitnikum – Fitness für alle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../res/css/style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
@@ -26,7 +27,7 @@
 
     <section class="categories">
         <p class="section-label">Unsere Kategorien</p>
-        <div class="category-grid">
+        <div class="category-grid" style="grid-template-columns: repeat(2, 1fr);">
             <div class="category-card">
                 <div class="category-icon">🏋️</div>
                 <h3>Training</h3>
@@ -36,11 +37,6 @@
                 <div class="category-icon">🥤</div>
                 <h3>Supplements</h3>
                 <p>Protein, Kreatin und mehr — nur was wirklich funktioniert.</p>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">🥗</div>
-                <h3>Ernährung</h3>
-                <p>Meal Prep, gesunde Snacks und Tipps für die richtige Ernährung.</p>
             </div>
         </div>
     </section>
@@ -53,7 +49,6 @@
             <a href="register.php" class="btn btn-primary">Jetzt registrieren</a>
         </div>
         <div class="stats">
-            <div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Produkte im Sortiment</div></div>
             <div class="stat-item"><div class="stat-number">10k+</div><div class="stat-label">Zufriedene Kunden</div></div>
             <div class="stat-item"><div class="stat-number">24h</div><div class="stat-label">Lieferzeit</div></div>
             <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Qualitätsgarantie</div></div>

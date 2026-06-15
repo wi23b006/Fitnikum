@@ -30,7 +30,7 @@ if ($action == "list") {
 
 
 else if ($action == "create") {
-    // Neuen Gutschein anlegen (Spec Admin 3a)
+    // Neuen Gutschein anlegen 
     $value     = (float)($_POST["value"] ?? 0);
     $expiresAt = $_POST["expires_at"] ?? "";
 

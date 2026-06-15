@@ -1,4 +1,4 @@
-// Steuert die drei Admin-Seiten: Produkte, Kunden, Gutscheine.
+// Steuert die drei Admin-Seiten
 // Beim Seitenladen wird je nach vorhandener Tabelle die passende Funktion aufgerufen.
 
 $(document).ready(function() {
@@ -35,10 +35,12 @@ function loadAdminProducts() {
             alert(response.error);
             return;
         }
+        //Produktliste zwischenspeichern 
         adminProducts = response.products;
 
         var tbody = $("#products-table tbody");
         tbody.empty();
+
 
         for (var i = 0; i < adminProducts.length; i++) {
             var p = adminProducts[i];
@@ -48,7 +50,6 @@ function loadAdminProducts() {
                     "<td>" + p.name + "</td>" +
                     "<td>" + p.category_name + "</td>" +
                     "<td>" + p.price + " €</td>" +
-                    "<td>" + p.rating + "</td>" +
                     "<td><img src='../res/img/" + p.image + "' width='60'></td>" +
                     "<td>" +
                         "<button class='btn btn-outline' onclick='editProduct(" + p.id + ")'>Bearbeiten</button> " +
@@ -72,7 +73,6 @@ function editProduct(id) {
     $("#product-form textarea[name=description]").val(p.description);
     $("#product-form select[name=category_id]").val(p.category_id);
     $("#product-form input[name=price]").val(p.price);
-    $("#product-form input[name=rating]").val(p.rating);
     $("#product-form input[name=image]").val(""); // Datei-Feld zurücksetzen
 
     $("#product-form-title").text("Produkt bearbeiten (#" + p.id + ")");
@@ -89,7 +89,7 @@ function saveProduct() {
     var form = $("#product-form")[0];
     var formData = new FormData(form);
 
-    // Wenn id vorhanden → update, sonst create
+    // Wenn id vorhanden, update, sonst create
     var hasId = $("#product-form input[name=id]").val() != "";
     var url = "../../Backend/logic/admin_products.php?action=" + (hasId ? "update" : "create");
 
@@ -172,7 +172,7 @@ function toggleCustomer(id, neuerWert) {
 function showCustomerOrders(userId) {
     var row = $("#orders-row-" + userId);
 
-    // Wenn schon offen → zuklappen
+    // Wenn schon offen, zuklappen
     if (row.is(":visible")) {
         row.hide();
         return;

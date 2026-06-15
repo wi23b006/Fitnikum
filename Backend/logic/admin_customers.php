@@ -21,7 +21,7 @@ if ($action == "list") {
 
 
 else if ($action == "toggle") {
-    // Kunde aktiv/inaktiv setzen (Matrix VIII 3P)
+    // Kunde aktiv/inaktiv setzen 
     $id     = (int)($_POST["id"] ?? 0);
     $active = (int)($_POST["active"] ?? 0);
 
@@ -34,7 +34,7 @@ else if ($action == "toggle") {
 
 
 else if ($action == "orders") {
-    // Alle Bestellungen eines Kunden mit Positionen (Matrix VIII 5P)
+    // Alle Bestellungen eines Kunden mit Positionen 
     $userId = (int)($_GET["user_id"] ?? 0);
 
     $stmt = $connection->prepare("SELECT id, total_price, payment_method, invoice_number, created_at FROM orders WHERE user_id = ? ORDER BY created_at DESC");
@@ -62,7 +62,7 @@ else if ($action == "orders") {
 
 
 else if ($action == "hide_item") {
-    // Einzelne Bestellposition ausblenden (Matrix VIII 4P)
+    // Einzelne Bestellposition ausblenden
     $itemId = (int)($_POST["item_id"] ?? 0);
 
     $stmt = $connection->prepare("UPDATE order_items SET visible = 0 WHERE id = ?");
