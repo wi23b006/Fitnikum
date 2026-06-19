@@ -6,8 +6,8 @@ requireLogin();
 $connection = getDatabaseConnection();
 $userId = $_SESSION["user_id"];
 
-// Bestellungen des Users, neueste zuerst (Spec 6c)
-$stmt = $connection->prepare("SELECT id, total_price, payment_method, invoice_number, created_at FROM orders WHERE user_id = ? ORDER BY created_at DESC");
+// Bestellungen des Users, nach Datum aufwärts sortiert
+$stmt = $connection->prepare("SELECT id, total_price, payment_method, invoice_number, created_at FROM orders WHERE user_id = ? ORDER BY created_at ASC");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -15,7 +15,7 @@ $result = $stmt->get_result();
 $orders = [];
 while ($order = $result->fetch_assoc()) {
 
-    // Positionen pro Bestellung (nur sichtbare - Matrix VIII)
+    // Positionen pro Bestellung
     $stmt2 = $connection->prepare("SELECT product_name, price, quantity FROM order_items WHERE order_id = ? AND visible = 1");
     $stmt2->bind_param("i", $order["id"]);
     $stmt2->execute();

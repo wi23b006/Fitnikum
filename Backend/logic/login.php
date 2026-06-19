@@ -4,8 +4,8 @@ include("../config/dbaccess.php");
 
 $connection = getDatabaseConnection();
 
-// Spec 2a: Login per Username ODER E-Mail
-$login    = trim($_POST["login"] ?? "");
+//Login per Username ODER E-Mail
+$login    = trim($_POST["login"] ?? ""); 
 $password = $_POST["password"]   ?? "";
 $remember = isset($_POST["remember"]); // Checkbox "Login merken"
 
@@ -25,7 +25,7 @@ if ($result->num_rows == 0) {
 
 $user = $result->fetch_assoc();
 
-// Deaktivierte Kunden dürfen sich nicht einloggen (Matrix VIII)
+// Deaktivierte Kunden dürfen sich nicht einloggen 
 if ((int)$user["active"] !== 1) {
     sendJson(["success" => false, "error" => "Account ist deaktiviert."]);
 }
@@ -40,7 +40,7 @@ $_SESSION["user_id"]  = $user["id"];
 $_SESSION["username"] = $user["username"];
 $_SESSION["role"]     = $user["role"];
 
-// "Login merken": Token in DB speichern und Cookie setzen (Spec 2e)
+// "Login merken": Token in DB speichern und Cookie setzen
 if ($remember) {
     $token = bin2hex(random_bytes(32));
     $stmt = $connection->prepare("UPDATE users SET remember_token = ? WHERE id = ?");

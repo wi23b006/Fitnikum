@@ -23,7 +23,7 @@ foreach ($_SESSION["cart"] as $item) {
     $total += $item["price"] * $item["quantity"];
 }
 
-// Gutschein einlösen (Spec V.c: Restwert bleibt erhalten)
+// Gutschein einlösen (Restwert bleibt erhalten)
 $voucherUsedAmount = 0;
 if ($voucherCode != "") {
 
@@ -42,23 +42,27 @@ if ($voucherCode != "") {
     $remaining = (float)$voucher["remaining_value"];
 
     if ($remaining >= $total) {
-        // Gutschein deckt alles → Restwert bleibt
+        // Gutschein deckt alles, Restwert bleibt
         $voucherUsedAmount = $total;
         $newRemaining = $remaining - $total;
     } else {
-        // Nur ein Teil wird abgedeckt → Gutschein leer
+        // Nur ein Teil wird abgedeckt, Gutschein leer
         $voucherUsedAmount = $remaining;
         $newRemaining = 0;
     }
 
+    //Restwert von Gutschein wird in DB gespeichert 
     $stmt = $connection->prepare("UPDATE vouchers SET remaining_value = ? WHERE id = ?");
     $stmt->bind_param("di", $newRemaining, $voucher["id"]);
     $stmt->execute();
 }
 
-// Bestellung anlegen (prepared statement → kein SQL-Injection-Risiko mehr)
+// Endpreis = Gesamtbetrag minus eingelöster Gutscheinwert 
+$finalTotal = $total - $voucherUsedAmount;
+
+// Bestellung anlegen (prepared statement, kein SQL-Injection-Risiko mehr)
 $stmt = $connection->prepare("INSERT INTO orders (user_id, total_price, payment_method, voucher_code, voucher_used_amount) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("idssd", $userId, $total, $paymentMethod, $voucherCode, $voucherUsedAmount);
+$stmt->bind_param("idssd", $userId, $finalTotal, $paymentMethod, $voucherCode, $voucherUsedAmount);
 $stmt->execute();
 $orderId = $stmt->insert_id;
 

@@ -12,13 +12,13 @@ $username = $_SESSION["username"] ?? null;
         <ul class="navbar-links">
 
             <?php if ($role === "admin") { ?>
-                <!-- Admin-Menü (Spec 2d.iii) -->
+                <!-- Admin-Menü -->
                 <li><a href="homepage.php">Home</a></li>
                 <li><a href="admin_produkte.php">Produkte bearbeiten</a></li>
                 <li><a href="admin_kunden.php">Kunden bearbeiten</a></li>
                 <li><a href="admin_gutscheine.php">Gutscheine verwalten</a></li>
             <?php } else { ?>
-                <!-- Gast (Spec 2d.i) und User (Spec 2d.ii) -->
+                <!-- Gast und User -->
                 <li><a href="homepage.php">Home</a></li>
                 <li class="dropdown">
                     <a href="#">Produkte</a>

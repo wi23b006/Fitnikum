@@ -23,7 +23,7 @@ if (!$order) {
     exit;
 }
 
-// Rechnungsnummer generieren, falls noch keine vergeben (Spec 6c)
+// Rechnungsnummer generieren, falls noch keine vergeben 
 if ($order["invoice_number"] === null) {
     $invoiceNumber = "RG-" . date("Y") . "-" . str_pad($order["id"], 5, "0", STR_PAD_LEFT);
     $stmt = $connection->prepare("UPDATE orders SET invoice_number = ? WHERE id = ?");
